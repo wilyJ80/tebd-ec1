@@ -6,10 +6,12 @@
 
 # Preparar ambiente
 
-1. Iniciar banco (WSL/Git Bash instalados): executar prepare.sh
+1. Iniciar banco (WSL/Git Bash instalados): executar `prepare.sh`
 
-2. Tenha o sqlite3 e uv instalado.
+2. Tenha o sqlite3 e uv instalado. [instalar uv aqui](https://docs.astral.sh/uv/getting-started/installation/)
 
-[uv](https://docs.astral.sh/uv/getting-started/installation/)
+3. Inicializar projeto: `uv sync`, `uv pip install -e .`
 
-Inicializar projeto: `uv sync`, `uv pip install -e .`
+# Executar ETL
+
+- `uv run src/create_olap.py`

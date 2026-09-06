@@ -1,6 +1,8 @@
 import sqlite3
-from sqlite3 import Connection, Cursor
+from sqlite3 import Cursor
+
 from domain.oltp.models import Produto
+
 
 class ProdutosDao:
     def __init__(self) -> None:
