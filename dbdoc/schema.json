@@ -1,0 +1,271 @@
+{
+  "name": "olap.db",
+  "tables": [
+    {
+      "name": "tempo_dim",
+      "type": "table",
+      "columns": [
+        {
+          "name": "sk_tempo",
+          "type": "INTEGER",
+          "nullable": true
+        },
+        {
+          "name": "data_venda",
+          "type": "DATE",
+          "nullable": false
+        },
+        {
+          "name": "mes",
+          "type": "INT",
+          "nullable": false
+        },
+        {
+          "name": "trimestre",
+          "type": "INT",
+          "nullable": false
+        },
+        {
+          "name": "ano",
+          "type": "INT",
+          "nullable": false
+        }
+      ],
+      "constraints": [
+        {
+          "name": "sk_tempo",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (sk_tempo)",
+          "table": "tempo_dim",
+          "columns": [
+            "sk_tempo"
+          ]
+        }
+      ],
+      "def": "CREATE TABLE tempo_dim (\n\tsk_tempo INTEGER PRIMARY KEY AUTOINCREMENT,\n\tdata_venda DATE NOT NULL,\n\tmes INT NOT NULL,\n\ttrimestre INT NOT NULL,\n\tano INT NOT NULL\n)"
+    },
+    {
+      "name": "produtos_dim",
+      "type": "table",
+      "columns": [
+        {
+          "name": "sk_produto",
+          "type": "INTEGER",
+          "nullable": true
+        },
+        {
+          "name": "id_produto",
+          "type": "INT",
+          "nullable": false
+        },
+        {
+          "name": "nome_produto",
+          "type": "VARCHAR(100)",
+          "nullable": false
+        },
+        {
+          "name": "categoria",
+          "type": "VARCHAR(50)",
+          "nullable": true
+        },
+        {
+          "name": "preco",
+          "type": "DECIMAL(10, 2)",
+          "nullable": false
+        }
+      ],
+      "constraints": [
+        {
+          "name": "sk_produto",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (sk_produto)",
+          "table": "produtos_dim",
+          "columns": [
+            "sk_produto"
+          ]
+        }
+      ],
+      "def": "CREATE TABLE produtos_dim (\n\tsk_produto INTEGER PRIMARY KEY AUTOINCREMENT,\n\tid_produto INT NOT NULL,\n    nome_produto VARCHAR(100) NOT NULL,\n    categoria VARCHAR(50),\n    preco DECIMAL(10, 2) NOT NULL\n)"
+    },
+    {
+      "name": "clientes_dim",
+      "type": "table",
+      "columns": [
+        {
+          "name": "sk_cliente",
+          "type": "INTEGER",
+          "nullable": true
+        },
+        {
+          "name": "id_cliente",
+          "type": "INT",
+          "nullable": false
+        },
+        {
+          "name": "nome_cliente",
+          "type": "VARCHAR(100)",
+          "nullable": false
+        },
+        {
+          "name": "cidade",
+          "type": "VARCHAR(50)",
+          "nullable": true
+        },
+        {
+          "name": "estado",
+          "type": "VARCHAR(50)",
+          "nullable": true
+        }
+      ],
+      "constraints": [
+        {
+          "name": "sk_cliente",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (sk_cliente)",
+          "table": "clientes_dim",
+          "columns": [
+            "sk_cliente"
+          ]
+        }
+      ],
+      "def": "CREATE TABLE clientes_dim (\n\tsk_cliente INTEGER PRIMARY KEY AUTOINCREMENT,\n\tid_cliente INT NOT NULL,\n    nome_cliente VARCHAR(100) NOT NULL,\n    cidade VARCHAR(50),\n    estado VARCHAR(50)\n)"
+    },
+    {
+      "name": "vendas_fato",
+      "type": "table",
+      "columns": [
+        {
+          "name": "sk_venda",
+          "type": "INTEGER",
+          "nullable": true
+        },
+        {
+          "name": "id_venda",
+          "type": "INT",
+          "nullable": false
+        },
+        {
+          "name": "sk_cliente",
+          "type": "INT",
+          "nullable": false
+        },
+        {
+          "name": "sk_produto",
+          "type": "INT",
+          "nullable": false
+        },
+        {
+          "name": "sk_tempo",
+          "type": "INT",
+          "nullable": false
+        },
+        {
+          "name": "quantidade",
+          "type": "INT",
+          "nullable": false
+        },
+        {
+          "name": "valor_total",
+          "type": "DECIMAL(10, 2)",
+          "nullable": false
+        }
+      ],
+      "constraints": [
+        {
+          "name": "sk_venda",
+          "type": "PRIMARY KEY",
+          "def": "PRIMARY KEY (sk_venda)",
+          "table": "vendas_fato",
+          "columns": [
+            "sk_venda"
+          ]
+        },
+        {
+          "name": "- (Foreign key ID: 0)",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (sk_tempo) REFERENCES tempo_dim (sk_tempo) ON UPDATE NO ACTION ON DELETE NO ACTION MATCH NONE",
+          "table": "vendas_fato",
+          "referenced_table": "tempo_dim",
+          "columns": [
+            "sk_tempo"
+          ],
+          "referenced_columns": [
+            "sk_tempo"
+          ]
+        },
+        {
+          "name": "- (Foreign key ID: 1)",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (sk_produto) REFERENCES produtos_dim (sk_produto) ON UPDATE NO ACTION ON DELETE NO ACTION MATCH NONE",
+          "table": "vendas_fato",
+          "referenced_table": "produtos_dim",
+          "columns": [
+            "sk_produto"
+          ],
+          "referenced_columns": [
+            "sk_produto"
+          ]
+        },
+        {
+          "name": "- (Foreign key ID: 2)",
+          "type": "FOREIGN KEY",
+          "def": "FOREIGN KEY (sk_cliente) REFERENCES clientes_dim (sk_cliente) ON UPDATE NO ACTION ON DELETE NO ACTION MATCH NONE",
+          "table": "vendas_fato",
+          "referenced_table": "clientes_dim",
+          "columns": [
+            "sk_cliente"
+          ],
+          "referenced_columns": [
+            "sk_cliente"
+          ]
+        }
+      ],
+      "def": "CREATE TABLE vendas_fato (\n\tsk_venda INTEGER PRIMARY KEY AUTOINCREMENT,\n\tid_venda INT NOT NULL,\n\n    sk_cliente INT NOT NULL,\n    sk_produto INT NOT NULL,\n\tsk_tempo INT NOT NULL,\n\n    quantidade INT NOT NULL,\n    valor_total DECIMAL(10, 2) NOT NULL,\n\n    FOREIGN KEY (sk_cliente) REFERENCES clientes_dim(sk_cliente),\n    FOREIGN KEY (sk_produto) REFERENCES produtos_dim(sk_produto)\n\tFOREIGN KEY(sk_tempo) REFERENCES tempo_dim(sk_tempo)\n)"
+    }
+  ],
+  "relations": [
+    {
+      "table": "vendas_fato",
+      "columns": [
+        "sk_tempo"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "tempo_dim",
+      "parent_columns": [
+        "sk_tempo"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (sk_tempo) REFERENCES tempo_dim (sk_tempo) ON UPDATE NO ACTION ON DELETE NO ACTION MATCH NONE"
+    },
+    {
+      "table": "vendas_fato",
+      "columns": [
+        "sk_produto"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "produtos_dim",
+      "parent_columns": [
+        "sk_produto"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (sk_produto) REFERENCES produtos_dim (sk_produto) ON UPDATE NO ACTION ON DELETE NO ACTION MATCH NONE"
+    },
+    {
+      "table": "vendas_fato",
+      "columns": [
+        "sk_cliente"
+      ],
+      "cardinality": "zero_or_more",
+      "parent_table": "clientes_dim",
+      "parent_columns": [
+        "sk_cliente"
+      ],
+      "parent_cardinality": "exactly_one",
+      "def": "FOREIGN KEY (sk_cliente) REFERENCES clientes_dim (sk_cliente) ON UPDATE NO ACTION ON DELETE NO ACTION MATCH NONE"
+    }
+  ],
+  "driver": {
+    "name": "sqlite",
+    "database_version": "3.53.2"
+  }
+}
