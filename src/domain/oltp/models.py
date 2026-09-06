@@ -1,0 +1,7 @@
+from pydantic import BaseModel
+
+class Produto(BaseModel):
+    id_produto: int | None
+    nome_produto: str
+    categoria: str | None
+    preco: int
