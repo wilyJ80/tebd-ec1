@@ -6,4 +6,10 @@
 
 # Preparar ambiente
 
-1. Iniciar banco
+1. Iniciar banco (WSL/Git Bash instalados): executar prepare.sh
+
+2. Tenha o sqlite3 e uv instalado.
+
+[uv](https://docs.astral.sh/uv/getting-started/installation/)
+
+Inicializar projeto: `uv sync`, `uv pip install -e .`
