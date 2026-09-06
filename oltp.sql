@@ -163,4 +163,3 @@ INSERT INTO despesas (descricao, valor, data_despesa, tipo_despesa) VALUES
 ('Viagem a Negócios', 1200.00, '2024-02-01', 'Variável'),
 ('Software Licenças', 700.00, '2024-02-05', 'Fixa'),
 ('Treinamento Equipe', 900.00, '2024-02-10', 'Variável');
-
