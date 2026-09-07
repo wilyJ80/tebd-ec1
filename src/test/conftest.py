@@ -3,6 +3,7 @@ import pytest
 from domain.olap.produtos_dim_dao import ProdutosDimDao
 from domain.olap.clientes_dim_dao import ClientesDimDao
 from domain.olap.vendas_fato_dao import VendasFatoDao
+from domain.olap.tempo_dim_dao import TempoDimDao
 
 def cleanup():
     produtos_dim_dao: ProdutosDimDao = ProdutosDimDao()
@@ -14,6 +15,12 @@ def cleanup():
     clientes_dim_dao: ClientesDimDao = ClientesDimDao()
     clientes_dim_dao.delete_clientes()
     count = clientes_dim_dao.select_clientes_count()
+    assert count is not None
+    assert count == 0
+
+    tempo_dim_dao: TempoDimDao = TempoDimDao()
+    tempo_dim_dao.delete_tempo()
+    count = tempo_dim_dao.select_tempo_count()
     assert count is not None
     assert count == 0
 

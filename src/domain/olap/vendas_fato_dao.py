@@ -39,7 +39,7 @@ class VendasFatoDao:
             id_venda, sk_cliente, sk_produto, sk_tempo, quantidade, valor_total
             ) VALUES (
             :id_venda, :sk_cliente, :sk_produto, :sk_tempo, :quantidade, :valor_total
-            )
+            ) ON CONFLICT DO NOTHING
             """
             cursor.execute(sql, venda.model_dump())
             inserted: int = cursor.rowcount

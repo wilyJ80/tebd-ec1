@@ -39,7 +39,7 @@ class ProdutosDimDao:
             id_produto, nome_produto, categoria, preco
             ) VALUES (
             :id_produto, :nome_produto, :categoria, :preco
-            )
+            ) ON CONFLICT DO NOTHING
             """
             cursor.execute(sql, produto.model_dump())
             inserted: int = cursor.rowcount

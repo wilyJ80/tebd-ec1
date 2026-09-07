@@ -38,7 +38,7 @@ class ClientesDimDao:
             id_cliente, nome_cliente, cidade, estado
             ) VALUES (
             :id_cliente, :nome_cliente, :cidade, :estado
-            )
+            ) ON CONFLICT DO NOTHING
             """
             cursor.execute(sql, cliente.model_dump())
             inserted: int = cursor.rowcount
