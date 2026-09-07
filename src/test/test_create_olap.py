@@ -2,6 +2,8 @@ from datetime import datetime
 from domain.olap.produtos_dim_dao import ProdutosDimDao
 from domain.olap.clientes_dim_dao import ClientesDimDao
 from domain.oltp.models import Produto, Cliente, Venda
+from domain.olap.models import Tempo
+from domain.olap.tempo_dim_dao import TempoDimDao
 from domain.oltp.produtos_dao import ProdutosDao
 from domain.oltp.clientes_dao import ClientesDao
 from domain.oltp.vendas_dao import VendasDao
@@ -53,6 +55,34 @@ def test_create_olap():
         quarter = (dt.month - 1) // 3 + 1
         year = dt.year
 
-    # Lookup SKs
+        tempo: Tempo = Tempo(
+            sk_tempo=None,
+            data_venda=venda.data_venda,
+            mes=month,
+            trimestre=quarter,
+            ano=year
+        )
+
+        tempo_dim_dao: TempoDimDao = TempoDimDao()
+        rowcount: int = tempo_dim_dao.insert_tempo(tempo)
+        assert rowcount is not None
+        assert rowcount > 0
+        count: int = tempo_dim_dao.select_tempo_count()
+        assert count > 0
+
+        # Lookup SKs
+
+        ## Vendas SK
+        venda_tempo: Tempo = tempo_dim_dao.select_by_data_venda(data_venda=venda.data_venda)
+        assert venda_tempo is not None
+        assert isinstance(venda_tempo, Tempo)
+
+        ## Clientes SK
+        assert venda.id_cliente is not None
+        venda_cliente: Cliente = clientes_dim_dao.select_cliente_by_id_cliente(venda.id_cliente)
+        assert venda_cliente is not None
+        assert isinstance(venda_cliente, Cliente)
+
+        ## Produtos SK
 
     # Load into fact table

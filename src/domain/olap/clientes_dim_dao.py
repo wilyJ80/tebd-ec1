@@ -44,3 +44,19 @@ class ClientesDimDao:
             inserted: int = cursor.rowcount
             conn.commit()
             return inserted
+
+    def select_cliente_by_id_cliente(self, id_cliente: int) -> Cliente:
+        with sqlite3.connect(self.db) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor: Cursor = conn.cursor()
+            sql: str = """
+            SELECT sk_cliente, id_cliente, nome_cliente, cidade, estado
+            FROM clientes_dim
+            WHERE id_cliente = ?
+            """
+            cursor.execute(sql, (id_cliente,))
+            row = cursor.fetchone()
+            cliente: Cliente = Cliente.model_validate(dict(row))
+            conn.commit()
+            return cliente
+
