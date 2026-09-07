@@ -15,3 +15,7 @@
 # Executar ETL
 
 - `uv run src/create_olap.py`
+
+# Desenvolvimento
+
+- Testagem com `./prepare.sh && uv run pytest`
