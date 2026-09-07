@@ -84,5 +84,9 @@ def test_create_olap():
         assert isinstance(venda_cliente, Cliente)
 
         ## Produtos SK
+        assert venda.id_produto is not None
+        venda_produto: Produto = produtos_dim_dao.select_produto_by_id_produto(venda.id_produto)
+        assert venda_produto is not None
+        assert isinstance(venda_produto, Produto)
 
     # Load into fact table

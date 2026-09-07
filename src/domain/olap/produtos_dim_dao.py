@@ -45,3 +45,19 @@ class ProdutosDimDao:
             inserted: int = cursor.rowcount
             conn.commit()
             return inserted
+
+    def select_produto_by_id_produto(self, id_produto: int) -> Produto:
+        with sqlite3.connect(self.db) as conn:
+            conn.row_factory = sqlite3.Row
+            cursor: Cursor = conn.cursor()
+            sql: str = """
+            SELECT sk_produto, id_produto, nome_produto, categoria, preco
+            FROM produtos_dim
+            WHERE id_produto = ?
+            """
+            cursor.execute(sql, (id_produto,))
+            row = cursor.fetchone()
+            produto: Produto = Produto.model_validate(dict(row))
+            conn.commit()
+            return produto
+
