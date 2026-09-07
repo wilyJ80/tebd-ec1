@@ -2,11 +2,12 @@ from datetime import datetime
 from domain.olap.produtos_dim_dao import ProdutosDimDao
 from domain.olap.clientes_dim_dao import ClientesDimDao
 from domain.oltp.models import Produto, Cliente, Venda
-from domain.olap.models import Tempo
+from domain.olap.models import Tempo, VendaFato
 from domain.olap.tempo_dim_dao import TempoDimDao
 from domain.oltp.produtos_dao import ProdutosDao
 from domain.oltp.clientes_dao import ClientesDao
 from domain.oltp.vendas_dao import VendasDao
+from domain.olap.vendas_fato_dao import VendasFatoDao
 
 
 def test_create_olap():
@@ -72,7 +73,7 @@ def test_create_olap():
 
         # Lookup SKs
 
-        ## Vendas SK
+        ## Tempo SK
         venda_tempo: Tempo = tempo_dim_dao.select_by_data_venda(data_venda=venda.data_venda)
         assert venda_tempo is not None
         assert isinstance(venda_tempo, Tempo)
@@ -89,4 +90,23 @@ def test_create_olap():
         assert venda_produto is not None
         assert isinstance(venda_produto, Produto)
 
-    # Load into fact table
+        # Load into fact table
+        vendas_fato_dao: VendasFatoDao = VendasFatoDao()
+        assert venda.id_venda is not None
+        assert venda_produto.id_produto is not None
+        assert venda_cliente.id_cliente is not None
+        assert venda_tempo.sk_tempo is not None
+        rowcount: int = vendas_fato_dao.insert_venda(
+            VendaFato(
+                id_venda=venda.id_venda,
+                sk_cliente=venda_cliente.id_cliente,
+                sk_produto=venda.id_produto,
+                sk_tempo=venda_tempo.sk_tempo,
+                quantidade=venda.quantidade,
+                valor_total=venda.valor_total
+            )
+        )
+        assert rowcount is not None
+        assert rowcount > 0
+        count: int = vendas_fato_dao.select_vendas_count()
+        assert count > 0

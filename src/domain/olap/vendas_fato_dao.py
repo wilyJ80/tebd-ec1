@@ -1,7 +1,7 @@
 import sqlite3
 from sqlite3 import Cursor
 
-from domain.oltp.models import Venda
+from domain.olap.models import VendaFato
 
 
 class VendasFatoDao:
@@ -31,7 +31,7 @@ class VendasFatoDao:
             conn.commit()
             return count
 
-    def insert_venda(self, venda: Venda) -> int:
+    def insert_venda(self, venda_fato: VendaFato) -> int:
         with sqlite3.connect(self.db) as conn:
             cursor: Cursor = conn.cursor()
             sql: str = """
@@ -41,7 +41,7 @@ class VendasFatoDao:
             :id_venda, :sk_cliente, :sk_produto, :sk_tempo, :quantidade, :valor_total
             ) ON CONFLICT DO NOTHING
             """
-            cursor.execute(sql, venda.model_dump())
+            cursor.execute(sql, venda_fato.model_dump())
             inserted: int = cursor.rowcount
             conn.commit()
             return inserted
